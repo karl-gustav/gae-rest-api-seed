@@ -1,6 +1,6 @@
 import webapp2
 from python.RestfulHandler import getHandler
-from models import Item
+from python.models import Item
 from python.LogInOut import Login, Logout
 
 app = webapp2.WSGIApplication([

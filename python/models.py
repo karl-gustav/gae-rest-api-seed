@@ -1,6 +1,6 @@
 from google.appengine.ext import db
-from python.lib.jsonUtil import modelToJson, jsonToModel
-from python.HTTPExceptions import HTTP404
+from lib.jsonUtil import modelToJson, jsonToModel
+from HTTPExceptions import HTTP404
 
 class Parrent(db.Model):
 	author = db.UserProperty(auto_current_user_add=True)
