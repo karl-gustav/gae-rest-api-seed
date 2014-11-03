@@ -17,7 +17,7 @@ class Parrent(db.Model):
 	def get(cls, key):
 		item = super(Parrent, cls).get(key)
 		if not item:
-			raiseEx(HTTP404, 'There don\'t exist a %s for the key "%s"!' % (cls.__name__, key))
+			raise HTTP404('There don\'t exist a %s for the key "%s"!' % (cls.__name__, key))
 		return item
 
 """
