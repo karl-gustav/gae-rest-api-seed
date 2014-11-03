@@ -1,0 +1,28 @@
+application: you-need-to-replace-this-with-your-app-id
+version: test
+runtime: python27
+api_version: 1
+threadsafe: true
+default_expiration: "1h"
+
+handlers:
+- url: /favicon.ico
+  static_files: html/images/favicon.ico
+  upload: html/images/favicon.ico
+
+- url: /images
+  static_dir: html/images
+
+- url: /app
+  static_dir: html/app
+
+- url: /css
+  static_dir: html/css
+
+- url: /
+  static_files: html/index.html
+  upload: html/index.html
+  login: required
+
+- url: /.*
+  script: main.app
