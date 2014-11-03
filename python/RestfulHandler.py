@@ -61,7 +61,7 @@ def getHandler(Model, createValidator = noValidation, updateValidator = noValida
 
             try:
                 model.delete()
-                self.response.out.write('Deleted "%s"!' % model)
+                self.response.out.write('Deleted "%s"!' % model.key())
             except Exception, e:
                 errorMsg = 'There was a problem deleting %s' % key
                 logging.error(errorMsg)
