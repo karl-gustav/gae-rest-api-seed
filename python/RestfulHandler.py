@@ -1,7 +1,7 @@
 import webapp2
 from lib.decorators import httpCode_loginRequired
 from lib.jsonUtil import modelListToJson
-from HTTPExceptions import HTTP403, HTTP404, HTTP415
+from HTTPExceptions import HTTP400, HTTP403, HTTP404, HTTP415
 import logging
 
 
@@ -17,11 +17,17 @@ def getHandler(Model, createValidator = noValidation, updateValidator = noValida
                 models = Model.all()
                 self.response.out.write(modelListToJson(models))
 
+            self.response.headers['Content-Type'] = 'application/json'
+
         @httpCode_loginRequired
         def put(self, key): #update
-            if not key: raise HTTP404("You can't update an instance if you don't put the key in the URL! Use POST for creating!")
+            if not key:
+                raise HTTP404("You can't update an instance if you don't put the identifier in the URL! Use POST for creating!")
             onlyAllowJson(self.request)
             instance = Model.fromJson(self.request.body)
+
+            if not instance.is_saved():
+                raise HTTP400("You tried to update a object that has no identifier in the object, if this is a new object use POST!")
 
             if unicode(instance.key()) != key:
                 raise HTTP403("JSON identifier in the object don't match the one in the URL!")
@@ -30,10 +36,12 @@ def getHandler(Model, createValidator = noValidation, updateValidator = noValida
 
             instance.put()
             self.response.out.write(instance.toJson())
+            self.response.headers['Content-Type'] = 'application/json'
 
         @httpCode_loginRequired
         def post(self, key=None): # create
-            if key: raise HTTP404("You can't create a new instance on an existing instance url! Use PUT for updating!")
+            if key:
+                raise HTTP404("You can't create a new instance on an existing instance url! Use PUT for updating!")
             onlyAllowJson(self.request)
             instance = Model.fromJson(self.request.body)
 
@@ -41,11 +49,13 @@ def getHandler(Model, createValidator = noValidation, updateValidator = noValida
 
             instance.put()
             self.response.out.write(instance.toJson())
+            self.response.headers['Content-Type'] = 'application/json'
 
 
         @httpCode_loginRequired
         def delete(self, key):
-            if not key: raise HTTP404("You need to supply the key you want to delete in the url!")
+            if not key:
+                raise HTTP404("You need to supply the key you want to delete in the url!")
 
             model = Model.get(key)
 
