@@ -26,3 +26,11 @@ handlers:
 
 - url: /.*
   script: main.app
+
+skip_files:
+- ^node_modules/.*
+- ^dist/.*
+- ^.git/.*
+- ^(.*/)?.*\.py[co]$
+- ^(.*/)?.*~$
+- ^(.*/)?\..*$
