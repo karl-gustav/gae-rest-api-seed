@@ -1,35 +1,36 @@
 "use strict"
 
-angular.module('app', []).controller('main', function ($scope, $http, $log){
-    $scope.newItem = {};
-
-    $http.get('/rest/items/')
-        .success(function (items) {
-            $scope.items = items;
+angular.module('app', ['ngResource'])
+    .factory('Item', function ($resource) {
+        return $resource('/rest/items/:id', {id:'@id'}, {
+            update: { method: 'PUT' }
         })
-        .error($log.error)
 
-    $scope.save = function () {
-        $http.post('/rest/items/', $scope.newItem)
-            .success(function (item) {
+    })
+    .controller('main', function ($scope, $http, $log, Item){
+        $scope.newItem = new Item;
+
+        Item.query(function (items) {
+            $scope.items = items;
+        }, $log.error);
+
+        $scope.save = function () {
+            $scope.newItem.$save(function (item) {
                 $scope.items.push(item)
-            })
-            .error($log.error)
-        $scope.newItem = {};
-    };
+            }, $log.error);
+            $scope.newItem = new Item;
+        };
 
-    $scope.toggle = function (item){
-        item.checked = !item.checked;
-        $http.put('/rest/items/' + item.id, item).error($log.error)
-    };
+        $scope.toggle = function (item){
+            item.checked = !item.checked;
+            item.$update(function () {}, $log.error);
+        };
 
-    $scope.delete = function (index) {
-        var item = $scope.items[index];
-        $http.delete('/rest/items/' + item.id)
-            .success(function () {
+        $scope.delete = function (index) {
+            var item = $scope.items[index];
+            item.$delete(function () {
                 $scope.items.splice(index, 1);
-            })
-            .error($log.error)
-    };
-});
+            }, $log.error);
+        };
+    });
 
