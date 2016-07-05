@@ -1,5 +1,5 @@
 from google.appengine.ext import db
-from lib.jsonUtil import modelToJson, jsonToModel
+from external_modules.gae_json_model_converter.jsonUtil import modelToJson, jsonToModel
 from HTTPExceptions import HTTP404
 
 class Parrent(db.Model):

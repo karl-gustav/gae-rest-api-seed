@@ -1,6 +1,6 @@
 import webapp2
 from lib.decorators import httpCode_loginRequired
-from lib.jsonUtil import modelListToJson
+from external_modules.gae_json_model_converter.jsonUtil import modelListToJson
 from HTTPExceptions import HTTP400, HTTP403, HTTP404, HTTP415
 import logging
 

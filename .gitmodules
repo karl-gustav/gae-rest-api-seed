@@ -1,0 +1,3 @@
+[submodule "python/external_modules/gae_json_model_converter"]
+	path = python/external_modules/gae_json_model_converter
+	url = git@github.com:Karl-Gustav/gae-json-model-converter.git
