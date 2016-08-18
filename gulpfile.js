@@ -1,34 +1,23 @@
-"use strict"
-
 'use strict';
 
 var gulp = require('gulp'),
 	$ = require('gulp-load-plugins')(),
-	sourceDir = './',
+	del = require('del'),
 	destDir = 'dist/',
 	config = 'app.yaml';
 
 gulp.task('default', ['build']);
 
-gulp.task('build', function (cb) {
-	$.runSequence('clean-dist', [
-		'use-min'
-	],
-	cb)
-});
-
-gulp.task('use-min', function(){
+gulp.task('build', ['clean-dist'], function(){
 	return gulp.src(
 		[
-				sourceDir + 'html/**/*.html',
-				sourceDir + 'html/images/*',
-				sourceDir + '**/*.py',
-				sourceDir + 'appengine_config.py',
-				sourceDir + 'app.yaml',
-				sourceDir + 'main.py'
+			'html/**/*.html',
+			'html/images/*',
+			'**/*.py',
+			'app.yaml'
 
 		],
-		{base: sourceDir})
+		{base: './'})
 		.pipe($.if(isIndexHtml, $.usemin({
 			js: [$.ngAnnotate(), $.uglify(), $.rev()],
 			jslib: [$.rev()],
@@ -38,8 +27,7 @@ gulp.task('use-min', function(){
 })
 
 gulp.task('clean-dist', function () {
-	return gulp.src(destDir, {read: false})
-		.pipe($.clean({force: true}));
+	return del(destDir);
 });
 
 function isIndexHtml (file) {
